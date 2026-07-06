@@ -1,6 +1,12 @@
 <?php
+session_start();
 require "config/connect.php";
 $message = "";
+
+if (($_SESSION['role'] ?? null) != 1) {
+    header("Location: index.php");
+    exit;
+}
 
 $sql = $db-> prepare("SELECT id_user, lastname_user, firstname_user, email_user
                     FROM users
@@ -14,7 +20,7 @@ $results = $sql->fetchAll(PDO::FETCH_ASSOC);
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Les participants</title>
+    <title>Liste des utilisateurs</title>
     <link rel="stylesheet" href="CSS/style.css">
 </head>
 <body>

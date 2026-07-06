@@ -4,8 +4,8 @@ require "config/connect.php";
 
 $message = "";
 
-$sql = $db->prepare("SELECT * FROM events WHERE fk_id_user = :id_user");
-$sql->execute([
+ $sql = $db->prepare("SELECT * FROM events WHERE fk_id_user = :id_user");
+ $sql->execute([
     ':id_user' => $_SESSION['id_user']
 ]);
 $results = $sql->fetchAll(PDO::FETCH_ASSOC);
@@ -19,9 +19,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['action']) && $_POST['
         empty($_POST['date_event']) ||
         empty($_POST['place_event'])
     ) {
-
         $message = "Tous les champs doivent être remplis.";
-
     } else {
 
         $title = trim($_POST['title_event']);
@@ -29,26 +27,35 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['action']) && $_POST['
         $date = $_POST['date_event'];
         $place = trim($_POST['place_event']);
 
-        try {
+  
+        $doublon = $db->prepare("SELECT * FROM events WHERE fk_id_user = :id_user AND title_event = :title_event AND date_event = :date_event");
+        $doublon->execute([
+            ':id_user' => $_SESSION['id_user'],
+            ':title_event' => $title,
+            ':date_event' => $date
+        ]);
 
-            $sql = $db->prepare(" INSERT INTO events (title_event, description_event, date_event, place_event, fk_id_user) VALUES (:title_event, :description_event, :date_event, :place_event, :id_user)");
+        if ($doublon->rowCount() > 0) {
+            $message = "Vous avez déja ajouter cet événement.";
+        } else {
+            try {
+                $sql = $db->prepare("INSERT INTO events (title_event, description_event, date_event, place_event, fk_id_user) VALUES (:title_event, :description_event, :date_event, :place_event, :id_user)");
+                $sql->execute([
+                    ':title_event' => $title,
+                    ':description_event' => $description,
+                    ':date_event' => $date,
+                    ':place_event' => $place,
+                    ':id_user' => $_SESSION['id_user']
+                ]);
 
-            $sql->execute([
-                ':title_event' => $title,
-                ':description_event' => $description,
-                ':date_event' => $date,
-                ':place_event' => $place,
-                ':id_user' => $_SESSION['id_user']
-            ]);
+                $message = "Événement ajouté avec succès.";
+                header("Location: createevent.php");
+                exit;
 
-            $message = "Événement ajouté avec succès.";
-
-            header("Location: createevent.php");
-            exit;
-
-        } catch (PDOException $e) {
-            $message = $e->getMessage();
-            echo "Réservation " .$message;
+            } catch (PDOException $e) {
+                $message = $e->getMessage();
+                echo "Réservation " . $message;
+            }
         }
     }
 }

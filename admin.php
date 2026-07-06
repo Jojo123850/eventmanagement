@@ -5,7 +5,12 @@ require "config/connect.php";
 
 $message = "";
 
-$sql = $db->prepare("SELECT COUNT(*) AS nb_participants, title_event FROM events e INNER JOIN events_has_users eu ON 
+if (($_SESSION['role'] ?? null) != 1) {
+    header("Location: index.php");
+    exit;
+}
+
+$sql = $db->prepare("SELECT COUNT(*) AS nb_participants, title_event FROM events e LEFT JOIN events_has_users eu ON 
 fk_id_event = id_event 
 GROUP BY id_event; ");
 
@@ -19,7 +24,7 @@ $results = $sql->fetchAll(PDO::FETCH_ASSOC);
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Administrateur</title>
     <link rel="stylesheet" href="CSS/style.css">
 </head>
 <body>

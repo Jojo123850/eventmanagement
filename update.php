@@ -4,6 +4,7 @@ require "config/connect.php";
 $message = "";
 
 $id_event = $_GET['id_event'] ?? $_POST['id_event'] ?? null;
+$id_user = $_SESSION['id_user'] ?? null;
 
 if (!$id_event) {
     header("Location: createevent.php");
@@ -15,13 +16,14 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $place = trim($_POST['place']);
     $description = trim($_POST['description']);
     $date = $_POST['date'];
+    $id_user = $_SESSION['id_user'];
 
     $requete = "UPDATE events
                 SET title_event = :title_event,
                     description_event = :description_event,
                     place_event = :place_event,
                     date_event = :date_event
-                WHERE id_event = :id_event";
+                WHERE id_event = :id_event AND fk_id_user= :id_user ";
 
     $data = $db->prepare($requete);
     $data->execute([
@@ -29,15 +31,17 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         ':description_event' => $description,
         ':place_event' => $place,
         ':date_event' => $date,
-        ':id_event' => $id_event
+        ':id_event' => $id_event,
+        ':id_user' => $id_user
     ]);
 
     $message = "Événement mis à jour.";
 }
 
-$data = $db->prepare("SELECT title_event, description_event, place_event, date_event FROM events WHERE id_event = :id_event");
+$data = $db->prepare("SELECT title_event, description_event, place_event, date_event FROM events WHERE id_event = :id_event AND fk_id_user= :id_user");
 $data->execute([
-    ':id_event' => $id_event
+    ':id_event' => $id_event,
+    ':id_user' => $id_user
 ]);
 
 $event = $data->fetch(PDO::FETCH_ASSOC);

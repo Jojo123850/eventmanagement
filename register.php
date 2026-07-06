@@ -61,7 +61,7 @@
         'email' => $email,
 
         'pass' => $hash,
-        'id_role'=>1
+        'id_role'=>2
          ]);
 
          if($success && $req-> rowCount() > 0){
@@ -85,7 +85,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Inscription</title>
+    <title>Inscription au site</title>
     <link rel="stylesheet" href="CSS/style.css">
 </head>
 <body class="register-page">

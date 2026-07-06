@@ -28,7 +28,7 @@ $results = $sql->fetchAll(PDO::FETCH_ASSOC);
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <title>Inscrits</title>
+    <title>Inscription événement</title>
     <link rel="stylesheet" href="CSS/style.css">
 </head>
 <body>
