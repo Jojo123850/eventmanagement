@@ -61,7 +61,7 @@
         'email' => $email,
 
         'pass' => $hash,
-        'id_role'=>2
+        'id_role'=>3
          ]);
 
          if($success && $req-> rowCount() > 0){
@@ -89,8 +89,9 @@
     <link rel="stylesheet" href="CSS/style.css">
 </head>
 <body class="register-page">
-    <?php require "nav.php"; ?>
+
     <main>
+        <?php require "nav.php"; ?>
         <div class="register-container">
             <h1>Inscription</h1>
 

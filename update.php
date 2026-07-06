@@ -3,6 +3,15 @@ session_start();
 require "config/connect.php";
 $message = "";
 
+if (!isset($_SESSION["id_user"])) {
+    header("Location: index.php");
+    exit();
+}
+
+if (($_SESSION['role'] ?? null) != 2) {
+    header("Location: index.php");
+    exit;
+}
 $id_event = $_GET['id_event'] ?? $_POST['id_event'] ?? null;
 $id_user = $_SESSION['id_user'] ?? null;
 

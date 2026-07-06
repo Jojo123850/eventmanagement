@@ -4,6 +4,11 @@ require "config/connect.php";
 
 
 
+if (!isset($_SESSION["id_user"])) {
+    header("Location: index.php");
+    exit;
+}
+
 $sql = $db->prepare("
     SELECT
         e.id_event, 
@@ -32,9 +37,10 @@ $results = $sql->fetchAll();
     <link rel="stylesheet" href="CSS/style.css">
 </head>
 <body>
-    <?php require "nav.php"; ?>
+   
     <main>
-        <h1><?= "Bonjour " .$_SESSION['firstname'] ?></h1>
+         <?php require "nav.php"; ?>
+        <h1><?= "Bonjour " . htmlspecialchars($_SESSION['firstname']) ?></h1>
         <h1>Des solutions indispensables pour organiser un événement </h1><br> <br>
 
         <a href="events.php">Voir toutes les événements disponible</a>
@@ -45,7 +51,7 @@ $results = $sql->fetchAll();
             <article>
                 <h2><?=  htmlspecialchars($row['title_event']) ?></h2>
                 <h3> <?= htmlspecialchars($row['description_event']) ?></h3>
-                <p> <?= date('d/m/Y', strtotime($row['date_event'])) ?> </p>
+                <p> <?= $row['date_event'] ? date('d/m/Y', strtotime($row['date_event'])) : '' ?> </p>
                 <p> <?= "Lieu:" . htmlspecialchars($row['place_event']) ?></p>
                 <a href="delete.php?id_event=<?= $row['id_event'] ?>">Annuler ma réservation</a>
             </article>

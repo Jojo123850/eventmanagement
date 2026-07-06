@@ -6,6 +6,11 @@ $message = "";
 require "config/connect.php";
  require "nav.php"; 
 
+ if (!isset($_SESSION["id_user"])) {
+    header("Location: index.php");
+    exit();
+}
+
 
 $id_user = $_SESSION['id_user'];
 $id_event = $_GET['id_event'] ?? null;
@@ -60,6 +65,7 @@ if ($doublon->rowCount() > 0) {
 <body>
    
     <main>
+        <?php require "nav.php"; ?>
         <p><?= htmlspecialchars($message) ?></p>
         <a href="events.php">Retour à la liste d'événement</a> <br> <br>
         <a href="profile.php">Voir mes événements</a>

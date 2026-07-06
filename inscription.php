@@ -1,7 +1,17 @@
 <?php
 session_start();
 require "config/connect.php";
-require "nav.php";
+
+
+if (!isset($_SESSION["id_user"])) {
+    header("Location: index.php");
+    exit();
+}
+
+if (($_SESSION['role'] ?? null) != 2) {
+    header("Location: index.php");
+    exit;
+}
 
 $id_event = $_GET['id_event'] ?? null;
 
@@ -33,6 +43,7 @@ $results = $sql->fetchAll(PDO::FETCH_ASSOC);
 </head>
 <body>
     <main>
+        <?php require "nav.php"; ?>
         <h1>Liste des inscrits</h1>
 
         <?php if (empty($results)): ?>

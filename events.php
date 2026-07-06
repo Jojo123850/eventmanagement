@@ -2,6 +2,11 @@
 session_start();
 require "config/connect.php";
 
+if (!isset($_SESSION["id_user"])) {
+    header("Location: index.php");
+    exit();
+}
+
 $sql = $db->prepare("SELECT * FROM events");
 $sql->execute();
 

@@ -1,10 +1,13 @@
 <?php
 session_start();
 require "config/connect.php";
- require "nav.php";
 
 $message = "";
 
+if (!isset($_SESSION["id_user"])) {
+    header("Location: index.php");
+    exit();
+}
 if (($_SESSION['role'] ?? null) != 1) {
     header("Location: index.php");
     exit;
@@ -28,22 +31,26 @@ $results = $sql->fetchAll(PDO::FETCH_ASSOC);
     <link rel="stylesheet" href="CSS/style.css">
 </head>
 <body>
-    <main>
-       
-        <h1>Popularité des événements</h1> 
-        <?php if(empty($results)): ?>
+<main>
+    <?php require "nav.php"; ?>
+
+    <h1>Popularité des événements</h1>
+
+    <?php if (empty($results)): ?>
         <p>Aucune donnée pour le moment</p>
-        <?php else:?>
-            <h1>Nombre de partipants</h1>
-            <?php foreach ($results as $row): ?>
+    <?php else: ?>
+        <h2>Nombre de participants</h2>
+
+        <?php foreach ($results as $row): ?>
             <article>
-                <h4><?=  htmlspecialchars($row['title_event'])  ?></h4>
-                <p> <?= "Nombre de participant: " . htmlspecialchars($row['nb_participants']) ?></p>  
+                <h4><?= htmlspecialchars($row['title_event']) ?></h4>
+                <p>Nombre de participants : <?= htmlspecialchars($row['nb_participants']) ?></p>
             </article>
         <?php endforeach; ?>
+
         <a href="usersadmin.php">Voir les participants</a>
         <a href="events.php">Retour</a>
-    </main>
-    <?php endif ?>
+    <?php endif; ?>
+</main>
 </body>
 </html>

@@ -4,6 +4,16 @@ require "config/connect.php";
 
 $message = "";
 
+if (!isset($_SESSION["id_user"])) {
+    header("Location: index.php");
+    exit();
+}
+
+if (($_SESSION['role'] ?? null) != 2) {
+    header("Location: index.php");
+    exit;
+}
+
  $sql = $db->prepare("SELECT * FROM events WHERE fk_id_user = :id_user");
  $sql->execute([
     ':id_user' => $_SESSION['id_user']

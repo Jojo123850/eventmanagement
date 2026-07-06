@@ -19,7 +19,7 @@ $role = $_SESSION['role'] ?? null;
                     <li><a href="admin.php">Administration</a></li>
                 <?php endif; ?>
 
-                <li><a href="index.php">Déconnexion</a></li>
+                <li><a href="logout.php">Déconnexion</a></li>
             <?php endif; ?>
         </ul>
     </nav>
